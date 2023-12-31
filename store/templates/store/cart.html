@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block titre %}Mon Panier{% endblock %}
+{% block content %}
+    
+<div class="bg-blue-500 text-white py-36 w-full mt-16">
+    <div class="container mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">Bienvenue sur notre site</h1>
+        <p class="text-lg mb-8">Découvrez notre sélection exclusive de produits.</p>
+        <a href="#" class="bg-white text-blue-500 py-2 px-4 rounded-full hover:bg-blue-600 hover:text-black transition">Voir nos produits</a>
+    </div>
+</div>
+
+<div class="mt-10">
+<h1>Mon Panier</h1>
+
+    {% if user.is_authenticated %}
+        {% if orders %}
+            <form method="post" action="{% url 'cart' %}">
+                {% csrf_token %}
+                {% for order in orders %}
+                {% if order.product %}
+                    <div>
+                        <span>{{ order.product.name }} - {{ order.product.price }} $</span>
+                        <button type="submit" name="action" value="remove" formaction="{% url 'remove-from-cart' order_id=order.id %}">-</button>
+                        <span>{{ order.quantity }}</span>
+                        <button type="submit" name="action" value="add" formaction="{% if order.product %}{% url 'add-to-cart' slug=order.product.slug %}{% elif order.goodie %}{% url 'add-to-cart-goodies' slug=order.goodie.slug %}{% endif %}">+</button>                        
+                        <!-- Ajouter le lien à l'intérieur du formulaire -->
+                        <a href="{% url 'delete-order' order_id=order.id %}">
+                            <button type="button">Supprimer</button>
+                        </a>
+                        
+                        <input type="hidden" name="product_id" value="{{ order.product.id }}">
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <img src="{{ order.product.thumbnail.url }}" alt="{{ order.product.name }}" style="max-width: 250px;">
+                        <p>{{ order.product.description }}</p>
+                        <p>En stock et prêt à être expédié</p>
+                    </div>
+                    {% else %}
+                    <div>
+                        <span>{{ order.goodie.name }} - {{ order.goodie.price }} $</span>
+                        <button type="submit" name="action" value="remove" formaction="{% url 'remove-from-cart' order_id=order.id %}">-</button>
+                        <span>{{ order.quantity }}</span>
+                        <button type="submit" name="action" value="add" formaction="{% if order.product %}{% url 'add-to-cart' slug=order.product.slug %}{% elif order.goodie %}{% url 'add-to-cart-goodies' slug=order.goodie.slug %}{% endif %}">+</button>                        
+                        <!-- Ajouter le lien à l'intérieur du formulaire -->
+                        <a href="{% url 'delete-order' order_id=order.id %}">
+                            <button type="button">Supprimer</button>
+                        </a>
+                        
+                        <input type="hidden" name="product_id" value="{{ order.product.id }}">
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <img src="{{ order.goodie.thumbnail.url }}" alt="{{ order.goodie.name }}" style="max-width: 250px;">
+                        <p>{{ order.goodie.description }}</p>
+                        <p>En stock et prêt à être expédié</p>
+                    {% endif %}
+                {% endfor %}
+
+                <div>Total : {{ total_price }}</div>
+                <hr>
+
+                <button type="submit" name="action" value="checkout">Passer la commande</button>
+            </form>
+        {% else %}
+            <p>Votre panier est vide.</p>
+        {% endif %}
+    {% else %}
+        <h1>Pour ajouter des produits, vous devez vous <a href="{% url 'login' %}">connecter</a></h1>   
+        <h1>Pas de compte, <a href="{% url 'signup' %}">inscrivez-vous</a></h1>
+    {% endif %}
+</div>
+
+{% endblock %}

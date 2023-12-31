@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block titre %}Détails sur cette Article {% endblock %}
+{% block content %}
+
+<h2>{{ product.name }}</h2>
+<h3>{{ product.price }} $</h3>
+<img src="{{ product.thumbnail.url }}" alt="{{ product.name }}">
+<p>{{ product.description }}</p>
+<p>En stock</p>
+
+
+{% if user.is_authenticated %}
+
+<button onclick="addToCart()" class="btn shadow-[0_9px_0_rgb(0,0,0)] hover:shadow-[0_4px_0px_rgb(0,0,0)] text-white 
+bg-emerald-650 p-2 ease-out hover:translate-y-1 transition-all rounded">
+    <a href="{% url 'add-to-cart' product.slug %}"><span class="font-bold">Ajouter au panier</span></a>
+</button>
+    {% else %}
+        <h1>Pour ajouter des produits dans votre Panier, vous devez vous <a href="{% url 'login' %}">connecter</a></h1>   
+        <h1>Pas de compte, <a href="{% url 'signup' %}">inscrivez-vous</a></h1>
+    {% endif %}
+
+{% endblock %}

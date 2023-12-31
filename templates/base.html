@@ -1,0 +1,130 @@
+{% load tailwind_tags %}
+{% load static %}
+
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titre %} {% endblock %}</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    {% tailwind_css %}
+</head>
+
+<body class="bg-gradient-to-br from-emerald-400 via-emerald-800 to-emerald-900">
+    <nav class="bg-gradient-to-br from-emerald-500 via-emerald-900 to-lime fixed w-full p-3" style="z-index: 1000;">
+        <div class="container mx-auto flex items-center p-2 justify-between">
+            <div class="flex ">
+                <!-- Logo et nom du site -->
+                <a href="{% url 'home' %}" class="flex items-center">
+                    <img style="width: 80px;" src="{% static 'DekuHome.png' %}" alt="Deku Home">
+                    <span class="bg-gradient-to-t from-emerald-500 via-emerald-400 to-emerald-600 bg-clip-text text-transparent text-6xl hover:text-emerald-900 font-font-Viga ml-4">Deku Shop</span>
+                </a>
+            </div>
+
+            <button id="menu-btn" class="lg:hidden md:ml-17 transition-all duration-300 ease-in-out">
+                <span class="text-white text-5xl ml-10 hover:text-gray-300 transition-all duration-300 ease-in-out">&#9776;</span>
+            </button>
+
+            <ul class="hidden lg:flex space-x-2 items-center ml-4">
+                <li class="sm:my-3">
+                    <a href="#" class="nav-link flex items-center">
+                        <img class="mr-3" style="width: 82px; " src="{% static 'LogoMHA.png' %}" alt="MHA">
+                        <span class="font-bold text-lg text-black hover:text-emerald-500 font-font-Viga">MyHeroAcademia</span>
+                    </a>
+                </li>
+                <li class="sm:my-3">
+                    <a href="#" class="nav-link flex items-center">
+                        <img class="mr-2" style="width: 72px;" src="{% static 'LogoNaruto.png' %}" alt="Naruto">
+                        <span class="font-bold text-lg text-black font-font-Viga hover:text-emerald-500">Naruto</span>
+                    </a>
+                </li>
+                <li class="sm:my-3">
+                    <a href="#" class="nav-link flex items-center">
+                        <img class="mr-1" style="width: 58px;" src="{% static 'LogoOnePiece.png' %}" alt="One Piece">
+                        <span class="font-bold text-lg text-black font-font-Viga hover:text-emerald-500">One Piece</span>
+                    </a>
+                </li>
+                <li class="sm:my-3">
+                    <a href="#" class="nav-link flex items-center">
+                        <img class="mr-3" style="width: 58px;" src="{% static 'LogoContact.png' %}" alt="Contact">
+                        <span class="font-bold text-lg text-black mr-16 font-font-Viga hover:text-emerald-500">Contact</span>
+                    </a>
+                </li>
+                  
+                <li class="flex items-center sm:my-3">
+                    <div>
+                      {% if user.is_authenticated %}
+                    <p class="font-semibold hover:underline flex">
+                        <span class="mr-1">Bienvenue,  </span>
+                        <a href="{% url 'cart' %}">
+                        <span class="text-emerald-400 font-font-Viga">{{ user.username }}</span>
+                        </a>
+                    </p>
+                    <p>
+                        <span><a href="{% url 'logout' %}" class="font-bold underline decoration-solid">Déconnexion</a></span>
+                    </p>
+                    </div> 
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn shadow-[0_9px_0_rgb(0,0,0)] hover:shadow-[0_4px_0px_rgb(0,0,0)] text-white bg-emerald-650 p-2
+                        ease-out hover:translate-y-1 transition-all rounded">
+                            <span class="font-bold text-emerald-500 hover:text-emerald-600">Connexion</span>
+                        </a>
+                </li>
+                <li class="flex items-center">
+                    <a href="{% url 'signup' %}" class="btn shadow-[0_9px_0_rgb(0,0,0)] hover:shadow-[0_4px_0px_rgb(0,0,0)] text-black bg-emerald-650 p-1
+                     ease-out hover:translate-y-1 transition-all rounded">
+                        <span class="font-bold text-lg hover:text-emerald-600">S'inscrire</span>
+                    </a>
+                   {% endif %}
+                </li> 
+                <li class="sm:my-5">
+                    <!-- Lien du panier avec le nombre d'articles -->
+                    <a href="{% url 'cart' %}" class="nav-link flex items-center">
+                        <img style="width: 58px;" src="{% static 'LogoPanier2.png' %}" alt="">
+                        <span class="font-bold text-lg bg-emerald-500 text-black p-2 rounded hover:text-emerald-900">{{ user.cart.orders.count }}</span>
+ 
+                    </a>
+                </li>
+            </ul> 
+        </div>
+    </nav>
+    
+    
+    
+<!-- Script pour basculer la visibilité de la liste de navigation sur les petits écrans    --> 
+    <script>
+    
+        var menuVisible = false;
+        var menuBtn = document.getElementById('menu-btn');
+        var navList = document.querySelector('.lg\\:flex');
+    
+        menuBtn.addEventListener('click', function () {
+            navList.classList.toggle('hidden', menuVisible);
+            menuVisible = !menuVisible;
+        });
+    </script>
+
+
+
+
+    
+
+    {% block content %} 
+    {% endblock %}
+
+<!-- Le Footer -->
+
+    <footer class="bg-gradient-to-b from-emerald-500 via-emerald-900 to-emerald-950 text-white py-3 fixed-bottom w-full mt-16">
+        <div class="container mx-auto flex justify-between">
+            <span>&copy; 2023 || Développé par Deku
+                <a href="#" class="social-icon instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="social-icon tiktok"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="social-icon facebook"><i class="fa-brands fa-facebook"></i></a>
+            </span>
+        </div>
+    </footer>  
+</body>
+</html>

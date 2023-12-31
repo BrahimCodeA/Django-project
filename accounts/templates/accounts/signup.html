@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block titre %}Création de compte{% endblock %}
+{% block content %}
+
+<div class="bg-blue-500 text-white py-36 w-full mt-16">
+    <div class="container mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">Bienvenue sur notre site</h1>
+        <p class="text-lg mb-8">Découvrez notre sélection exclusive de produits.</p>
+        <a href="#" class="bg-white text-blue-500 py-2 px-4 rounded-full hover:bg-blue-600 hover:text-black transition">Voir nos produits</a>
+    </div>
+</div>
+    
+<div class="text-center mt-10">
+<h1>S'inscrire</h1>
+<form method="POST">
+    {% csrf_token %}
+    <p>
+        <label for="username">Nom d'utilisateur</label>
+        <input type="text" id="username" name="username">
+
+    </p>
+    <p>
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password">
+
+    </p>
+    <button type="submit">S'inscrire</button>
+</form>
+</div>
+{% endblock %}
